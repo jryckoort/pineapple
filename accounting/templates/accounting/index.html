@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block header %}
+
+<h1>
+  Page Header
+  <small>Optional description</small>
+</h1>
+
+{% endblock %}
+
+{% block content %}
+
+{% for account in accounts %}
+    <div>
+        <h1>{{ account.name }}</h1>
+        <p>{{ account.text }}</p>
+        <p>Type: {{ account.type }}</p>
+        <p>Budget: {{ account.budget }}</p>
+        {% for user in account.budget.user.all %}
+        <p>Owner: {{ user.first_name }}</p>
+        {% endfor %}
+    </div>
+{% endfor %}
+
+{% endblock %}

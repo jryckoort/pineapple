@@ -25,8 +25,7 @@ SECRET_KEY = '6e0&mc8#t)pl6tou&_pb+(xt@ao6ip2u(o$fji_n)u9@_#v=*1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '<your_username>.pythonanywhere.com']
-
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'pineapple.alwaysdata.com']
 
 # Application definition
 
@@ -39,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'accounting',
+    'cellar',
     'miscellaneous',
 ]
 
@@ -128,9 +128,19 @@ STATICFILES_DIRS = (
 
 # Redirections
 
-LOGIN_REDIRECT_URL = '/accounting/'
+LOGIN_REDIRECT_URL = ''
+LOGOUT_REDIRECT_URL = '/accounts/login/'
 
-# sessions
+# Sessions
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_COOKIE_AGE = 365 * 24 * 60 * 60 # 1 Year
+
+# Medias
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+]

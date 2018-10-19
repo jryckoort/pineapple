@@ -11,14 +11,17 @@
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
   <link rel="stylesheet" href="{% static 'bower_components/bootstrap/dist/css/bootstrap.min.css' %}">
-  <link rel="stylesheet" href="{% static 'bower_components/font-awesome/css/font-awesome.min.css' %}">
-  <link rel="stylesheet" href="{% static 'bower_components/Ionicons/css/ionicons.min.css' %}">
-  <link rel="stylesheet" href="{% static 'dist/css/AdminLTE.min.css' %}">
-  <link rel="stylesheet" href="{% static 'dist/css/skins/skin-purple.min.css' %}">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'dist/css/AdminLTE.css' %}">
+  <link rel="stylesheet" href="{% static 'dist/css/skins/skin-blue.min.css' %}">
+  <link rel="stylesheet" href="{% static 'dist/css/pineapple.css' %}">
+
+  {% block stylesheets %}
+  {% endblock %}
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body class="hold-transition skin-purple sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
   <header class="main-header">
     <!-- LOGO -->
@@ -29,7 +32,7 @@
 
     <!-- NAVBAR -->
     <nav class="navbar navbar-static-top" role="navigation">
-      <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+      <a href="#" class="sidebar-toggle fa fa-bars" data-toggle="push-menu" role="button">
         <span class="sr-only">Toggle navigation</span>
       </a>
       <div class="navbar-custom-menu">
@@ -43,13 +46,13 @@
               <li class="user-header">
                 <img src="{% static 'dist/img/julien.jpg' %}" class="img-circle" alt="User Image">
                 <p>
-                  {{ request.user.first_name }} {{ request.user.last_name }} - {{ request.user.profile }}
+                  {{ request.user.first_name }} {{ request.user.last_name }}
                   <small>Compte créé {{ request.user.date_joined|naturaltime }}</small>
                 </p>
               </li>
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="#" class="btn btn-default btn-flat">Profil</a>
+                  <a href="#" class="btn btn-default btn-flat">Paramètres</a>
                 </div>
                 <div class="pull-right">
                   <a href="{% url 'logout' %}" class="btn btn-default btn-flat">Déconnexion</a>
@@ -66,31 +69,60 @@
   <aside class="main-sidebar">
     <section class="sidebar">
       <ul class="sidebar-menu" data-widget="tree">
-        <li class="header">Mes finances</li>
         <li class="active">
           <a href="#">
-            <i class="fas fa-tachometer-alt"></i>
+            <i class="fa fa-tachometer-alt"></i>
             <span>Tableau de bord</span>
           </a>
         </li>
-        <li>
-          <a href="#">
-            <i class="fa fa-link"></i>
-            <span>Budgets</span>
-          </a>
-        </li>
+        <li class="header">Mes finances</li>
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-link"></i>
+            <i class="fa fa-piggy-bank"></i>
             <span>Comptes</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="#">Budget personnel</a></li>
-            <li><a href="#">Budget commun</a></li>
+            {% for budget in request.user.budget_set.all %}
+            <li><a href="{% url 'accounts' budget.id %}">{{ budget.name }}</a></li>
+            {% endfor %}
           </ul>
+        </li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-euro-sign"></i>
+            <span>Opérations</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            {% for budget in request.user.budget_set.all %}
+            <li><a href="{% url 'operations' budget.id %}">{{ budget.name }}</a></li>
+            {% endfor %}
+          </ul>
+        </li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-wrench"></i>
+            <span>Paramètres</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="#">Budgets</a></li>
+            <li><a href="#">Comptes</a></li>
+          </ul>
+        </li>
+        <li class="header">Mon cellier</li>
+        <li>
+          <a href="#">
+            <i class="fa fa-wine-bottle"></i>
+            <span>Ma cave</span>
+          </a>
         </li>
       </ul>
     </section>
@@ -111,17 +143,20 @@
   <!-- FOOTER -->
   <footer class="main-footer">
     <div class="pull-right hidden-xs">
-      Powered by <a href="https://www.djangoproject.com/" target="_blank">Django</a> and <a href="https://adminlte.io/" target="_blank">AdminLTE</a>
+      Propulsé par <a href="https://www.djangoproject.com/" target="_blank">Django</a> et <a href="https://adminlte.io/" target="_blank">AdminLTE</a>
     </div>
-    <strong>Copyright &copy; 2018 <a href="https://www.facebook.com/jryckoort" target="_blank">Julien Ryckoort</a>.</strong> All rights reserved.
+    <strong>&copy; 2018 <a href="https://www.facebook.com/jryckoort" target="_blank">Julien Ryckoort</a>.</strong> Tous droits réservés.
   </footer>
 </div>
 
 <script src="{% static 'bower_components/jquery/dist/jquery.min.js' %}"></script>
 <script src="{% static 'bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
-<script src="{% static 'dist/js/adminlte.min.js' %}"></script>
 <script src="{% static 'bower_components/fastclick/lib/fastclick.js' %}"></script>
 <script src="{% static 'bower_components/jquery-slimscroll/jquery.slimscroll.min.js' %}"></script>
+<script src="{% static 'dist/js/adminlte.min.js' %}"></script>
+
+{% block scripts %}
+{% endblock %}
 
 </body>
 </html>

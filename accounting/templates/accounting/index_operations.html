@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block header %}
+<h1>
+  Opérations
+  <small>{{ budget.name }}</small>
+</h1>
+{% endblock %}
+
+{% block content %}
+<div class="box">
+  <div class="box-body no-padding">
+    <table class="table">
+      <tbody>
+        <tr>
+          <th>Opération</th>
+          <th>Date</th>
+          <th>Compte</th>
+          <th>Montant</th>
+          <th>Compensation</th>
+        </tr>
+        {% for entry in entries %}
+        <tr {% if entry.amount >= 0 %} class="table-operations-income" {% else %} class="table-operations-expense" {% endif %}>
+          <td><a href="{% url 'view_operation' entry.id %}">{{ entry.name }}</a></td>
+          <td>{{ entry.date }}</td>
+          <td>{{ entry.account.name }}</td>
+          <td>{{ entry.amount }} €</td>
+          <td>{{ entry.compensation_account.name }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="box-footer clearfix">
+    <a href="{% url 'add_operation' %}">Ajouter une opération</a>
+    <ul class="pagination pagination-sm no-margin pull-right">
+      <li><a href="#">&laquo;</a></li>
+      <li><a href="#">1</a></li>
+      <li><a href="#">2</a></li>
+      <li><a href="#">3</a></li>
+      <li><a href="#">&raquo;</a></li>
+    </ul>
+  </div>
+</div>
+{% endblock %}

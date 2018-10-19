@@ -1,0 +1,11 @@
+tr.table-operations-expense {
+  background-color: #ffe5e5;
+}
+
+tr.table-operations-income {
+  background-color: #ecffe5;
+}
+
+.sidebar-toggle {
+  font-size: 20px;
+}
